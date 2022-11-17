@@ -17,11 +17,18 @@ export interface Item {
 
   author?: Author[];
   contributor?: Author[];
+  source?: ItemSource;
 
   published?: Date;
   copyright?: string;
 
   extensions?: Extension[];
+}
+
+export interface ItemSource {
+  id: string;
+  title: string;
+  updated?: Date;
 }
 
 export interface Enclosure {

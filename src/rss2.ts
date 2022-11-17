@@ -51,7 +51,7 @@ export default (ins: Feed) => {
     base.rss.channel.image = {
       title: { _text: options.title },
       url: { _text: options.image },
-      link: { _text: sanitize(options.link) }
+      link: { _text: sanitize(options.link) },
     };
   }
 
@@ -104,8 +104,8 @@ export default (ins: Feed) => {
     base.rss.channel["atom:link"] = {
       _attributes: {
         href: sanitize(options.hub),
-        rel: "hub"
-      }
+        rel: "hub",
+      },
     };
   }
 
@@ -140,6 +140,15 @@ export default (ins: Feed) => {
 
     if (entry.published) {
       item.pubDate = { _text: entry.published.toUTCString() };
+    }
+
+    if (entry.source) {
+      item.source = {
+        _attributes: {
+          url: entry.source.id,
+        },
+        _text: entry.source.title,
+      };
     }
 
     if (entry.description) {
