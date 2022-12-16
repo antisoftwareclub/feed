@@ -8,7 +8,7 @@ import { Author, Category, Extension, Item } from "./typings";
 export default (ins: Feed) => {
   const { options, items, extensions } = ins;
 
-  let feed: any = {
+  const feed: any = {
     version: "https://jsonfeed.org/version/1",
     title: options.title,
   };
@@ -44,7 +44,7 @@ export default (ins: Feed) => {
   });
 
   feed.items = items.map((item: Item) => {
-    let feedItem: any = {
+    const feedItem: any = {
       id: item.id,
       // json_feed distinguishes between html and text content
       // but since we only take a single type, we'll assume HTML
@@ -69,6 +69,10 @@ export default (ins: Feed) => {
     }
     if (item.published) {
       feedItem.date_published = item.published.toISOString();
+    }
+
+    if (item.source) {
+      feedItem.external_url = item.source.link;
     }
 
     if (item.author) {

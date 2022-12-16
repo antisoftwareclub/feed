@@ -79,101 +79,94 @@ export default (ins: Feed) => {
 
   // icon
 
-  base.feed.entry = [];
-
   /**************************************************************************
    * "entry" nodes
    *************************************************************************/
-  ins.items.map((item: Item) => {
-    //
-    // entry: required elements
-    //
-
-    let entry: convert.ElementCompact = {
-      title: { _attributes: { type: "html" }, _cdata: item.title },
-      id: sanitize(item.id || item.link),
-      link: [{ _attributes: { href: sanitize(item.link) } }],
-      updated: item.date.toISOString(),
-    };
-
-    //
-    // entry: recommended elements
-    //
-    if (item.description) {
-      entry.summary = {
-        _attributes: { type: "html" },
-        _cdata: item.description,
-      };
-    }
-
-    if (item.content) {
-      entry.content = {
-        _attributes: { type: "html" },
-        _cdata: item.content,
-      };
-    }
-
-    // entry author(s)
-    if (Array.isArray(item.author)) {
-      entry.author = [];
-
-      item.author.map((author: Author) => {
-        entry.author.push(formatAuthor(author));
-      });
-    }
-
-    // content
-
-    // link - relative link to article
-
-    //
-    // entry: optional elements
-    //
-
-    // category
-    if (Array.isArray(item.category)) {
-      entry.category = [];
-
-      item.category.map((category: Category) => {
-        entry.category.push(formatCategory(category));
-      });
-    }
-
-    // contributor
-    if (item.contributor && Array.isArray(item.contributor)) {
-      entry.contributor = [];
-
-      item.contributor.map((contributor: Author) => {
-        entry.contributor.push(formatAuthor(contributor));
-      });
-    }
-
-    // published
-    if (item.published) {
-      entry.published = item.published.toISOString();
-    }
-
-    // source
-    if (item.source) {
-      entry.source = {
-        id: { _text: item.id },
-        title: { _text: item.title },
-      };
-
-      if (item.source.updated) {
-        entry.source.updated = { _updated: item.source.updated.toISOString() };
-      }
-    }
-
-    // rights
-    if (item.copyright) {
-      entry.rights = item.copyright;
-    }
-
-    base.feed.entry.push(entry);
-  });
+  base.feed.entry = ins.items.map((item: Item) => formatItem(item));
 
   return convert.js2xml(base, { compact: true, ignoreComment: true, spaces: 4 });
+};
+
+const formatItem = (item: Item) => {
+  //
+  // entry: required elements
+  //
+
+  const entry: convert.ElementCompact = {
+    title: { _attributes: { type: "html" }, _cdata: item.title },
+    id: sanitize(item.id || item.link),
+    link: [{ _attributes: { href: sanitize(item.link) } }],
+    updated: item.date.toISOString(),
+  };
+
+  //
+  // entry: recommended elements
+  //
+  if (item.description) {
+    entry.summary = {
+      _attributes: { type: "html" },
+      _cdata: item.description,
+    };
+  }
+
+  if (item.content) {
+    entry.content = {
+      _attributes: { type: "html" },
+      _cdata: item.content,
+    };
+  }
+
+  // entry author(s)
+  if (Array.isArray(item.author)) {
+    entry.author = [];
+
+    item.author.map((author: Author) => {
+      entry.author.push(formatAuthor(author));
+    });
+  }
+
+  // content
+
+  // link - relative link to article
+
+  //
+  // entry: optional elements
+  //
+
+  // category
+  if (Array.isArray(item.category)) {
+    entry.category = [];
+
+    item.category.map((category: Category) => {
+      entry.category.push(formatCategory(category));
+    });
+  }
+
+  // contributor
+  if (item.contributor && Array.isArray(item.contributor)) {
+    entry.contributor = [];
+
+    item.contributor.map((contributor: Author) => {
+      entry.contributor.push(formatAuthor(contributor));
+    });
+  }
+
+  // published
+  if (item.published) {
+    entry.published = item.published.toISOString();
+  }
+
+  // source
+  if (item.source) {
+    entry.source = formatItem(item.source);
+  }
+
+  // rights
+  if (item.copyright) {
+    entry.rights = item.copyright;
+  }
+
+  return entry;
 };
 
 /**

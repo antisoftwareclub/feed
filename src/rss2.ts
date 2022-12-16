@@ -116,7 +116,7 @@ export default (ins: Feed) => {
   base.rss.channel.item = [];
 
   ins.items.map((entry: Item) => {
-    let item: any = {};
+    const item: any = {};
 
     if (entry.title) {
       item.title = { _cdata: entry.title };
@@ -140,15 +140,6 @@ export default (ins: Feed) => {
 
     if (entry.published) {
       item.pubDate = { _text: entry.published.toUTCString() };
-    }
-
-    if (entry.source) {
-      item.source = {
-        _attributes: {
-          url: entry.source.id,
-        },
-        _text: entry.source.title,
-      };
     }
 
     if (entry.description) {

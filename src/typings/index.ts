@@ -25,11 +25,7 @@ export interface Item {
   extensions?: Extension[];
 }
 
-export interface ItemSource {
-  id: string;
-  title: string;
-  updated?: Date;
-}
+export type ItemSource = Omit<Item, "source">;
 
 export interface Enclosure {
   url: string;
