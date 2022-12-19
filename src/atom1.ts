@@ -45,6 +45,20 @@ export default (ins: Feed) => {
     base.feed.link.push({ _attributes: { rel: "hub", href: sanitize(options.hub) } });
   }
 
+  //#region pagination
+  if (options.feedLinks?.first_page) {
+    base.feed.link.push({ _attributes: { rel: "first", href: sanitize(options.feedLinks.first_page) } });
+  }
+
+  if (options.feedLinks?.next_page) {
+    base.feed.link.push({ _attributes: { rel: "next", href: sanitize(options.feedLinks.next_page) } });
+  }
+
+  if (options.feedLinks?.prev_page) {
+    base.feed.link.push({ _attributes: { rel: "previous", href: sanitize(options.feedLinks.prev_page) } });
+  }
+  //#endregion
+
   /**************************************************************************
    * "feed" node: optional elements
    *************************************************************************/

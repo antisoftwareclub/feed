@@ -48,6 +48,8 @@ export interface Category {
   term?: string;
 }
 
+export type FeedLink = "json" | "atom" | "rss" | "next_page" | "prev_page" | "first_page";
+
 export interface FeedOptions {
   id: string;
   title: string;
@@ -57,7 +59,7 @@ export interface FeedOptions {
   ttl?: number;
 
   feed?: string;
-  feedLinks?: any;
+  feedLinks?: { [K in FeedLink]?: string };
   hub?: string;
   docs?: string;
 

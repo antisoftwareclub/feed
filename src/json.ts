@@ -9,7 +9,7 @@ export default (ins: Feed) => {
   const { options, items, extensions } = ins;
 
   const feed: any = {
-    version: "https://jsonfeed.org/version/1",
+    version: "https://jsonfeed.org/version/1.1",
     title: options.title,
   };
 
@@ -17,8 +17,12 @@ export default (ins: Feed) => {
     feed.home_page_url = options.link;
   }
 
-  if (options.feedLinks && options.feedLinks.json) {
+  if (options.feedLinks?.json) {
     feed.feed_url = options.feedLinks.json;
+  }
+
+  if (options.feedLinks?.next_page) {
+    feed.next_url = options.feedLinks.next_page;
   }
 
   if (options.description) {
