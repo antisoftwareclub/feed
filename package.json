@@ -7,6 +7,9 @@
   "license": "MIT",
   "main": "lib/feed.js",
   "types": "lib/feed.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
   "scripts": {
     "build": "rm -rf lib/ && mkdir lib && tsc",
     "prepare": "yarn build",
